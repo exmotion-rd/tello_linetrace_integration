@@ -11,4 +11,4 @@ images:
     tag: 360a9242dcd30c261a15465a781f4c4c01e18cef
   teleop_key:
     repository: teleop_key
-    tag: 52ee6309b7c83251a34d1bf3de9a1c63f5a4dcfe
+    tag: c280da9304f3e8434dbea5f72a58ef3e586b68e1
