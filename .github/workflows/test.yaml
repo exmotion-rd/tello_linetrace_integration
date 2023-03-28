@@ -70,7 +70,7 @@ jobs:
           echo $SIMULATOR_IMAGE
           echo $BRIDGE_IMAGE
           echo $CONTROLLER_IMAGE
-          echo $SIMULATOR_ENV=`readlink -f ./simulator_env.json`
+          echo $SIMULATOR_ENV
 
           # docker-compose -f docker-compose_headless.yaml up -d
           # sleep 10
