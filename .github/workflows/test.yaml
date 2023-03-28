@@ -85,8 +85,8 @@ jobs:
         working-directory: test
         run: |
           python3 verify_flight_path.py \
-            -sp ./simulator_env.json
-            -fl ${{ runner.temp }}/result/airsim_rec.txt
+            -sp ./simulator_env.json \
+            -fl ${{ runner.temp }}/result/airsim_rec.txt \
             -png ${{ runner.temp }}/result/verify_result.png
 
       - name: Upload Recording Data
