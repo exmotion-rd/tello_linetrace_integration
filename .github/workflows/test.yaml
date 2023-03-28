@@ -65,7 +65,7 @@ jobs:
           CONTROLLER_IMAGE: ${{ env.CONTROLLER_IMAGE }}
         working-directory: test
         run: |
-          export SIMULATOR_ENV='./simulator_env.json'
+          SIMULATOR_ENV='./simulator_env.json'
           docker-compose -f docker-compose_headless.yaml up -d
           sleep 10
           python3 recording.py start
