@@ -11,7 +11,8 @@ def main():
 
     print('linetrace start')
     send_len = sock.sendto('1'.encode('utf-8'), serv_address)
-    time.sleep(60)
+    #time.sleep(60)
+    time.sleep(10)
 
     print('linetrace stop')
     send_len = sock.sendto('0'.encode('utf-8'), serv_address)
