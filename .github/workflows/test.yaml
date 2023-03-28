@@ -84,6 +84,7 @@ jobs:
             -png ${{ runner.temp }}/verify_result.png
 
       - name: Copy Result
+        if: ${{ always() }}
         run: |
           mkdir ${{ runner.temp }}/result
           cp ${{ runner.temp }}/AirSim/*/airsim_rec.txt ${{ runner.temp }}/result
@@ -91,6 +92,7 @@ jobs:
           cp ${{ runner.temp }}/verify_result.png ${{ runner.temp }}/result
 
       - name: Upload Result
+        if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
           name: simulation_result
