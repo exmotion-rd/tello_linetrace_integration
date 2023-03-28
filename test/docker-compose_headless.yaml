@@ -12,7 +12,7 @@ services:
     volumes:
       - ${SIMULATOR_ENV}:/tmp/simulator_env.json
     command:
-      ./bin/LinetraceWorld/LinetraceWorld.sh -env=${SIMULATOR_ENV} -RenderOffscreen
+      ./bin/LinetraceWorld/LinetraceWorld.sh -env=/tmp/simulator_env.json -RenderOffscreen
 
   bridge:
     image: ${BRIDGE_IMAGE}
