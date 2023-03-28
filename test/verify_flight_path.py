@@ -7,7 +7,7 @@ from operator import itemgetter
 from scipy import interpolate
 from scipy.spatial import distance
 
-DIST_THREASHOLD = 1.0
+DIST_THREASHOLD = 0.1
 
 def main():
     parser = argparse.ArgumentParser()
