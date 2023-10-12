@@ -1,0 +1,29 @@
+name: Hello World
+
+on:
+  push
+
+jobs:
+  scale-test1:
+    runs-on: arc-runner-set
+    steps:
+      - run: docker run hello-world
+      - run: sleep 10
+
+  scale-test2:
+    runs-on: arc-runner-set
+    steps:
+      - run: docker run hello-world
+      - run: sleep 10
+
+  scale-test3:
+    runs-on: arc-runner-set
+    steps:
+      - run: docker run hello-world
+      - run: sleep 10
+
+  scale-test4:
+    runs-on: arc-runner-set
+    steps:
+      - run: docker run hello-world
+      - run: sleep 10
