@@ -38,10 +38,10 @@ jobs:
           echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
       - run: |
-          sudo apt install libhdf5-dev
-          sudo apt install libatlas-base-dev
-          sudo apt install libopencv-dev
-          sudo apt install python3-pip
+          sudo apt -y install libhdf5-dev
+          sudo apt -y install libatlas-base-dev
+          sudo apt -y install libopencv-dev
+          sudo apt -y install python3-pip
           pip3 install -U pip
           pip3 install numpy --upgrade
           pip3 install opencv-python==4.5.5.64
