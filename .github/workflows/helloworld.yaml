@@ -4,25 +4,25 @@ on:
   push
 
 jobs:
-  scale-test1:
+  job1:
     runs-on: arc-runner-set
     steps:
       - run: docker run hello-world
       - run: sleep 10
 
-  scale-test2:
+  job2:
     runs-on: arc-runner-set
     steps:
       - run: docker run hello-world
       - run: sleep 10
 
-  scale-test3:
+  job3:
     runs-on: arc-runner-set
     steps:
       - run: docker run hello-world
       - run: sleep 10
 
-  scale-test4:
+  job4:
     runs-on: arc-runner-set
     steps:
       - run: docker run hello-world
