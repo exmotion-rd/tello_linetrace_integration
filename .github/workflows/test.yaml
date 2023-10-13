@@ -40,7 +40,7 @@ jobs:
           chmod +x ${{ github.workspace }}/bin/docker-compose
           echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
-      - run: docker run -it --rm --gpus all nvidia/cudagl:11.2.2-devel-ubuntu20.04 /usr/bin/nvidia-smi
+      - run: docker run -t --rm --gpus all nvidia/cudagl:11.2.2-devel-ubuntu20.04 /usr/bin/nvidia-smi
 
       - run: |
           # sudo apt -y install libhdf5-dev
