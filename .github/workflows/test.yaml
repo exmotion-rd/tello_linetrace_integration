@@ -19,7 +19,7 @@ jobs:
       contents: read  # This is required for actions/checkout
     runs-on: arc-runner-set
     steps:
-      - run: nvidia-smi
+      - run: /usr/bin/nvidia-smi
 
       - name: Checkout
         uses: actions/checkout@v3
