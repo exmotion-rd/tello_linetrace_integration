@@ -14,6 +14,9 @@ on:
 
 jobs:
   test:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
     runs-on: arc-runner-set
     steps:
       - name: Checkout
@@ -38,14 +41,14 @@ jobs:
           echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
       - run: |
-          sudo apt -y install libhdf5-dev
-          sudo apt -y install libatlas-base-dev
-          sudo apt -y install libopencv-dev
+          # sudo apt -y install libhdf5-dev
+          # sudo apt -y install libatlas-base-dev
+          # sudo apt -y install libopencv-dev
           sudo apt -y install python3-pip
           pip3 install -U pip
           pip3 install numpy --upgrade
-          pip3 install opencv-python==4.5.5.64
-          pip3 install opencv-contrib-python==4.5.5.64
+          # pip3 install opencv-python==4.5.5.64
+          # pip3 install opencv-contrib-python==4.5.5.64
           pip3 install scipy
           pip3 install matplotlib
           pip3 install msgpack-rpc-python
@@ -90,7 +93,7 @@ jobs:
       #   with:
       #     registry: ${{ env.DOCKER_REGISTORY }}
 
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: "us-east-1"
           role-to-assume: "arn:aws:iam::964246069091:role/github-actions-ecr-access-role"
