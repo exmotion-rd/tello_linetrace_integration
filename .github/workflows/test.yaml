@@ -72,7 +72,7 @@ jobs:
       #   with:
       #     registry: ${{ env.DOCKER_REGISTORY }}
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: "us-east-1"
           role-to-assume: "arn:aws:iam::964246069091:role/github-actions-ecr-access-role"
