@@ -40,7 +40,7 @@ jobs:
 
       - name: Setup pip
         run: |
-          pip install numpy
+          pip install numpy==1.20.3
           pip install scipy
           pip install matplotlib
           pip install msgpack-rpc-python
