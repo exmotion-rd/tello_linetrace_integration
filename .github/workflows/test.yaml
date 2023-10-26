@@ -60,17 +60,24 @@ jobs:
           echo BRIDGE_IMAGE=${DOCKER_REGISTORY}/${BRIDGE_REPOS}:${BRIDGE_TAG} >> $GITHUB_ENV
           echo CONTROLLER_IMAGE=${DOCKER_REGISTORY}/${CONTROLLER_REPOS}:${CONTROLLER_TAG} >> $GITHUB_ENV
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1-node16
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
 
-      - name: Login to Amazon ECR
-        uses: docker/login-action@v2
+      # - name: Login to Amazon ECR
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ${{ env.DOCKER_REGISTORY }}
+
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
-          registry: ${{ env.DOCKER_REGISTORY }}
+          aws-region: "us-east-1"
+          role-to-assume: "arn:aws:iam::964246069091:role/github-actions-ecr-access-role"
+
+      - uses: aws-actions/amazon-ecr-login@v1
 
       - name: Pull Docker Images
         run: |
