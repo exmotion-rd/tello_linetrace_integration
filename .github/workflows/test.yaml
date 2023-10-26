@@ -36,7 +36,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.8.16'
 
       - name: Setup pip
         run: |
@@ -88,9 +88,9 @@ jobs:
           export SIMULATOR_ENV='./simulator_env.json'
           docker-compose -f docker-compose_headless.yaml up -d
           sleep 10
-          python3 recording.py start
-          python3 test.py
-          python3 recording.py stop
+          python recording.py start
+          python test.py
+          python recording.py stop
           sleep 10
           docker-compose -f docker-compose_headless.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
           docker-compose -f docker-compose_headless.yaml down
