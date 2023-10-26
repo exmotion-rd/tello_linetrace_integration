@@ -33,18 +33,18 @@ jobs:
           chmod +x ${{ github.workspace }}/bin/docker-compose
           echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
-      - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8.16'
+      # - name: Setup python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.8.16'
 
-      - name: Setup pip
-        run: |
-          pip install numpy==1.24.2
-          pip install scipy
-          pip install matplotlib
-          pip install msgpack-rpc-python
-          pip install airsim
+      # - name: Setup pip
+      #   run: |
+      #     pip install numpy==1.24.2
+      #     pip install scipy
+      #     pip install matplotlib
+      #     pip install msgpack-rpc-python
+      #     pip install airsim
 
       - name: Parse config.yaml
         run: |
