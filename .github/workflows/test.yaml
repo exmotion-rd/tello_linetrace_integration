@@ -118,6 +118,8 @@ jobs:
           CONTROLLER_IMAGE: ${{ env.CONTROLLER_IMAGE }}
         working-directory: test
         run: |
+          python3 -V
+
           export SIMULATOR_ENV='./simulator_env.json'
           # docker-compose -f docker-compose_ci_test.yaml up
           # sleep 100
