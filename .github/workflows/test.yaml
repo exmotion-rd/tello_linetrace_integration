@@ -116,8 +116,10 @@ jobs:
         working-directory: test
         run: |
           export SIMULATOR_ENV='./simulator_env.json'
-          docker-compose -f docker-compose_headless.yaml up
-          #docker-compose -f docker-compose_headless.yaml up -d
+          docker-compose -f docker-compose_ci_test.yaml up
+          sleep 100
+          docker-compose -f docker-compose_ci_test.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
+          docker-compose -f docker-compose_ci_test.yaml down
           #sleep 10
           #python3 recording.py start
           #python3 test.py

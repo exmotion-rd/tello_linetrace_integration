@@ -1,0 +1,33 @@
+services:
+  simulator:
+    image: ${SIMULATOR_IMAGE}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    network_mode: host
+    volumes:
+      - ${SIMULATOR_ENV}:/tmp/simulator_env.json
+    command:
+      ./bin/LinetraceWorld/LinetraceWorld.sh -env=/tmp/simulator_env.json -RenderOffscreen
+
+  bridge:
+    image: ${BRIDGE_IMAGE}
+    network_mode: host
+    command:
+      python bridge.py
+
+  controller:
+    image: ${CONTROLLER_IMAGE}
+    network_mode: host
+    command:
+      python controller.py --tello_ip 127.0.0.1 --headless --hsv_min 0 0 0 --hsv_max 70 255 255
+
+  harness:
+    image: 964246069091.dkr.ecr.us-east-1.amazonaws.com/harness:latest
+    network_mode: host
+    command:
+      run_test.sh
