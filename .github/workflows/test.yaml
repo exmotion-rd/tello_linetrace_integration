@@ -17,7 +17,8 @@ jobs:
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read  # This is required for actions/checkout
-    runs-on: arc-runner-set
+    #runs-on: arc-runner-set
+    runs-on: gpu
     steps:
       #- run: docker run -t --rm --gpus all nvidia/cudagl:11.2.2-devel-ubuntu20.04 /usr/bin/nvidia-smi
 
