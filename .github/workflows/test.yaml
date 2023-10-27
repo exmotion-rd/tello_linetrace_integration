@@ -107,6 +107,7 @@ jobs:
           docker pull ${{ env.SIMULATOR_IMAGE }}
           docker pull ${{ env.BRIDGE_IMAGE }}
           docker pull ${{ env.CONTROLLER_IMAGE }}
+          docker pull 964246069091.dkr.ecr.us-east-1.amazonaws.com/harness:latest
 
       - name: Run Simulation
         env:
