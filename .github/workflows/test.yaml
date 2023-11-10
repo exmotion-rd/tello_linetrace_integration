@@ -127,7 +127,7 @@ jobs:
           #docker-compose -f docker-compose_ci_test.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
           #docker-compose -f docker-compose_ci_test.yaml down
 
-          docker-compose -f docker-compose_headless.yaml up
+          docker-compose -f docker-compose_headless.yaml up -d
           sleep 10
           python3 recording.py start
           python3 test.py
