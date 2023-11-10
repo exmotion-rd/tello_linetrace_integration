@@ -122,9 +122,10 @@ jobs:
         run: |
           export SIMULATOR_ENV='./simulator_env.json'
 
-          docker-compose -f docker-compose_ci_test.yaml up
+          docker-compose -f docker-compose_ci_test.yaml up -d
           sleep 100
           docker-compose -f docker-compose_ci_test.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
+          docker-compose -f docker-compose_ci_test.yaml logs
           docker-compose -f docker-compose_ci_test.yaml down
 
           #docker-compose -f docker-compose_headless.yaml up -d
