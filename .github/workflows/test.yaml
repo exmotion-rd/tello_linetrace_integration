@@ -152,7 +152,7 @@ jobs:
           cp -r ${{ runner.temp }}/AirSim/*/images ${{ runner.temp }}/result
           cp ${{ runner.temp }}/verify_result.png ${{ runner.temp }}/result
           ls ${{ runner.temp }}/result
-          cat cp ${{ runner.temp }}/AirSim/*/airsim_rec.txt
+          cat ${{ runner.temp }}/AirSim/*/airsim_rec.txt
 
       - name: Upload Result
         if: ${{ always() }}
