@@ -20,7 +20,7 @@ jobs:
     runs-on: arc-runner-set
     #runs-on: gpu
     steps:
-      - run: docker run -t --rm --gpus all nvidia/cudagl:11.2.2-devel-ubuntu20.04 /usr/bin/nvidia-smi
+      # - run: docker run -t --rm --gpus all nvidia/cudagl:11.2.2-devel-ubuntu20.04 /usr/bin/nvidia-smi
 
       - name: Checkout
         uses: actions/checkout@v3

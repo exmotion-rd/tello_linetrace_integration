@@ -19,15 +19,21 @@ services:
     network_mode: host
     command:
       python bridge.py
+    depends_on:
+      - simulator
 
   controller:
     image: ${CONTROLLER_IMAGE}
     network_mode: host
     command:
       python controller.py --tello_ip 127.0.0.1 --headless --hsv_min 0 0 0 --hsv_max 70 255 255
+    depends_on:
+      - bridge
 
   harness:
     image: 964246069091.dkr.ecr.us-east-1.amazonaws.com/harness:latest
     network_mode: host
     command:
       ./run_test.sh
+    depends_on:
+      - controller
