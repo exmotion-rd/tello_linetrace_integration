@@ -5,7 +5,7 @@ images:
     tag: f5043897dd19063d2fb6c1454281639ab53418fd
   bridge:
     repository: bridge
-    tag: 0ffe497d6af3f90bece0e83915b483c5918b89d9
+    tag: 2a468614f162dbb8995bd4a888efc634130b4296
   linetrace_control:
     repository: linetrace_control
     tag: d45b8ccb39c7a82b6dcf2dbaa94b5647ad765541
