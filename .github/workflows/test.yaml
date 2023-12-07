@@ -44,11 +44,11 @@ jobs:
 
       - name: Setup pip
         run: |
-          pip install numpy
+          pip install numpy --upgrade
           pip install scipy
           pip install matplotlib
           pip install msgpack-rpc-python
-          pip install airsim
+          pip install airsim==1.7.0
 
       - name: Parse config.yaml
         run: |
