@@ -48,7 +48,7 @@ jobs:
           pip install scipy
           pip install matplotlib
           pip install msgpack-rpc-python
-          pip install airsim==1.5.0
+          pip install airsim==1.8.1
 
       - name: Parse config.yaml
         run: |
@@ -89,9 +89,9 @@ jobs:
           export SIMULATOR_ENV='./simulator_env.json'
           docker-compose -f docker-compose_headless.yaml up -d
           sleep 10
-          #python3 recording.py start
+          python3 recording.py start
           python3 test.py
-          #python3 recording.py stop
+          python3 recording.py stop
           sleep 10
           docker-compose -f docker-compose_headless.yaml logs
           #docker-compose -f docker-compose_headless.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
