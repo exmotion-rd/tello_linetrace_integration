@@ -10,7 +10,7 @@ services:
               capabilities: [gpu]
     network_mode: host
     environment:
-      - DISPLAY=${DISPLAY}
+      - DISPLAY=${SIMULATOR_IMAGE}
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all    
     volumes:
