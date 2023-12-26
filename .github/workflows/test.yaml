@@ -95,7 +95,7 @@ jobs:
         run: |
           export SIMULATOR_ENV='./simulator_env.json'
           docker-compose -f docker-compose_headless.yaml up -d
-          sleep 30
+          sleep 60
           python3 recording.py start
           python3 test.py
           python3 recording.py stop
