@@ -82,6 +82,7 @@ jobs:
 
       - name: Pull Docker Images
         run: |
+          timeout 30 sh -c 'until (docker ps > /dev/null 2>&1) do sleep 1; done'
           docker pull ${{ env.SIMULATOR_IMAGE }}
           docker pull ${{ env.BRIDGE_IMAGE }}
           docker pull ${{ env.CONTROLLER_IMAGE }}
