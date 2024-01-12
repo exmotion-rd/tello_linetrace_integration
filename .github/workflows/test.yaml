@@ -28,7 +28,7 @@ jobs:
       - name: X Test Cases
         id: list_testcases
         run: |
-          testcases = $(ls test/testcases | jq -R -s 'split("\n")[:-1]')
+          testcases=$(ls test/testcases | jq -R -s 'split("\n")[:-1]')
           echo "value=${testcases}" >> $GITHUB_OUTPUT
 
   run_tests:
