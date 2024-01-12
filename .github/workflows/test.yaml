@@ -17,30 +17,47 @@ permissions:
   contents: read
 
 jobs:
-  pickup_testcase:
+  pickup_testcases:
     runs-on: ubuntu-latest
     outputs:
-      testcases: ${{ steps.list_testcases.outputs.value }}
+      testcases: ${{ steps.pickup_testcases.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: X Test Cases
-        id: list_testcases
+      - name: Pickup Test Cases
+        id: pickup_testcases
         run: |
           testcases=$(ls test/testcases | jq -c -R -s 'split("\n")[:-1]')
           echo "value=${testcases}" >> $GITHUB_OUTPUT
 
   run_tests:
-    needs: pickup_testcase
+    needs: pickup_testcases
     # runs-on: gpu-runner
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        testcase: ${{ fromJson(needs.pickup_testcase.outputs.testcases)}}
+        testcase: ${{ fromJson(needs.pickup_testcases.outputs.testcases )}}
     steps:
-      - run: echo ${{ matrix.testcase }}
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: hoge
+        working-directory: test
+        run: |
+          echo ${{ matrix.testcase }}
+          export SIMULATOR_ENV='./testcases/${{ matrix.testcase }}/simulator_env.json'
+          echo $SIMULATOR_ENV
+          mkdir ${{ runner.temp }}/result
+          touch ${{ runner.temp }}/result/hogehoge 
+
+      - name: Upload Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.testcase }}
+          path: ${{ runner.temp }}/result
+
 
     # steps:
     #   - name: Checkout
