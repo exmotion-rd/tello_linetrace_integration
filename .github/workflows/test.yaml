@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        testcase: ${{ fromJson(needs.pickup_testcases.outputs.testcases)}}
+        testcase: ${{ fromJson(needs.pickup_testcase.outputs.testcases)}}
     steps:
       - run: echo ${{ matrix.testcase }}
 
