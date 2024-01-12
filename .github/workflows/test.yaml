@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  pickup_testcases:
+  pickup_testcase:
     runs-on: ubuntu-latest
     outputs:
       testcases: ${{ steps.list_testcases.outputs.value }}
