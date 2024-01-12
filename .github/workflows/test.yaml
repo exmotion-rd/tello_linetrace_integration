@@ -17,107 +17,130 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: gpu-runner
+  pickup_testcases:
+    runs-on: ubuntu-latest
+    outputs:
+      testcases: ${{ steps.list_testcases.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Setup pip
+      - name: X Test Cases
+        id: list_testcases
         run: |
-          pip install setuptools wheel
-          pip install numpy
-          pip install scipy
-          pip install matplotlib
-          pip install msgpack-rpc-python
-          pip install airsim==1.7.0
+          dirs = $(ls test/testcases | jq -R -s 'split("\n")[:-1]')
+          echo "value=${dirs}" >> $GITHUB_OUTPUT
 
-      - name: Setup yq
-        run: |
-          mkdir -p ${{ github.workspace }}/bin
-          python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/mikefarah/yq/releases/download/v4.31.1/yq_linux_386', '${{ github.workspace }}/bin/yq')"
-          chmod +x ${{ github.workspace }}/bin/yq
-          echo ${{ github.workspace }}/bin >> $GITHUB_PATH
+  run_tests:
+    needs: pickup_testcase
+    # runs-on: gpu-runner
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        testcase: ${{ fromJson(needs.pickup_testcases.outputs.testcases)}}
+    steps:
+      - run: echo ${{ matrix.testcase }}
 
-      - name: Setup docker-compose
-        run: |
-          mkdir -p ${{ github.workspace }}/bin
-          python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/docker/compose/releases/download/v2.17.1/docker-compose-linux-x86_64', '${{ github.workspace }}/bin/docker-compose')"
-          chmod +x ${{ github.workspace }}/bin/docker-compose
-          echo ${{ github.workspace }}/bin >> $GITHUB_PATH
+    # steps:
+    #   - name: Checkout
+    #     uses: actions/checkout@v3
 
-      - name: Parse config.yaml
-        run: |
-          DOCKER_REGISTORY=`yq eval '.registory' config.yaml`
-          SIMULATOR_REPOS=`yq eval '.images.simulator.repository' config.yaml`
-          SIMULATOR_TAG=`yq eval '.images.simulator.tag' config.yaml`
-          BRIDGE_REPOS=`yq eval '.images.bridge.repository' config.yaml`
-          BRIDGE_TAG=`yq eval '.images.bridge.tag' config.yaml`
-          CONTROLLER_REPOS=`yq eval '.images.linetrace_control.repository' config.yaml`
-          CONTROLLER_TAG=`yq eval '.images.linetrace_control.tag' config.yaml`
-          echo DOCKER_REGISTORY=${DOCKER_REGISTORY} >> $GITHUB_ENV
-          echo SIMULATOR_IMAGE=${DOCKER_REGISTORY}/${SIMULATOR_REPOS}:${SIMULATOR_TAG} >> $GITHUB_ENV
-          echo BRIDGE_IMAGE=${DOCKER_REGISTORY}/${BRIDGE_REPOS}:${BRIDGE_TAG} >> $GITHUB_ENV
-          echo CONTROLLER_IMAGE=${DOCKER_REGISTORY}/${CONTROLLER_REPOS}:${CONTROLLER_TAG} >> $GITHUB_ENV
+    #   - name: Setup python
+    #     uses: actions/setup-python@v4
+    #     with:
+    #       python-version: '3.9'
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-region: "ap-northeast-1"
-          role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
+    #   - name: Setup pip
+    #     run: |
+    #       pip install setuptools wheel
+    #       pip install numpy
+    #       pip install scipy
+    #       pip install matplotlib
+    #       pip install msgpack-rpc-python
+    #       pip install airsim==1.7.0
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+    #   - name: Setup yq
+    #     run: |
+    #       mkdir -p ${{ github.workspace }}/bin
+    #       python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/mikefarah/yq/releases/download/v4.31.1/yq_linux_386', '${{ github.workspace }}/bin/yq')"
+    #       chmod +x ${{ github.workspace }}/bin/yq
+    #       echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
-      - name: Pull Docker Images
-        run: |
-          timeout 3600 sh -c 'until (docker ps > /dev/null 2>&1) do sleep 1; done'
-          docker pull ${{ env.SIMULATOR_IMAGE }}
-          docker pull ${{ env.BRIDGE_IMAGE }}
-          docker pull ${{ env.CONTROLLER_IMAGE }}
+    #   - name: Setup docker-compose
+    #     run: |
+    #       mkdir -p ${{ github.workspace }}/bin
+    #       python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/docker/compose/releases/download/v2.17.1/docker-compose-linux-x86_64', '${{ github.workspace }}/bin/docker-compose')"
+    #       chmod +x ${{ github.workspace }}/bin/docker-compose
+    #       echo ${{ github.workspace }}/bin >> $GITHUB_PATH
 
-      - name: Run Simulation
-        env:
-          SIMULATOR_IMAGE: ${{ env.SIMULATOR_IMAGE }}
-          BRIDGE_IMAGE: ${{ env.BRIDGE_IMAGE }}
-          CONTROLLER_IMAGE: ${{ env.CONTROLLER_IMAGE }}
-        working-directory: test
-        run: |
-          export SIMULATOR_ENV='./simulator_env.json'
-          docker-compose -f docker-compose_headless.yaml up -d
-          sleep 60
-          python3 recording.py start
-          python3 test.py
-          python3 recording.py stop
-          sleep 10
-          docker-compose -f docker-compose_headless.yaml logs
-          docker-compose -f docker-compose_headless.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
-          docker-compose -f docker-compose_headless.yaml down
+    #   - name: Parse config.yaml
+    #     run: |
+    #       DOCKER_REGISTORY=`yq eval '.registory' config.yaml`
+    #       SIMULATOR_REPOS=`yq eval '.images.simulator.repository' config.yaml`
+    #       SIMULATOR_TAG=`yq eval '.images.simulator.tag' config.yaml`
+    #       BRIDGE_REPOS=`yq eval '.images.bridge.repository' config.yaml`
+    #       BRIDGE_TAG=`yq eval '.images.bridge.tag' config.yaml`
+    #       CONTROLLER_REPOS=`yq eval '.images.linetrace_control.repository' config.yaml`
+    #       CONTROLLER_TAG=`yq eval '.images.linetrace_control.tag' config.yaml`
+    #       echo DOCKER_REGISTORY=${DOCKER_REGISTORY} >> $GITHUB_ENV
+    #       echo SIMULATOR_IMAGE=${DOCKER_REGISTORY}/${SIMULATOR_REPOS}:${SIMULATOR_TAG} >> $GITHUB_ENV
+    #       echo BRIDGE_IMAGE=${DOCKER_REGISTORY}/${BRIDGE_REPOS}:${BRIDGE_TAG} >> $GITHUB_ENV
+    #       echo CONTROLLER_IMAGE=${DOCKER_REGISTORY}/${CONTROLLER_REPOS}:${CONTROLLER_TAG} >> $GITHUB_ENV
 
-      - name: Verify Simulation Result
-        working-directory: test
-        run: |
-          python3 verify_flight_path.py \
-            -sp ./simulator_env.json \
-            -fl ${{ runner.temp }}/AirSim/*/airsim_rec.txt \
-            -png ${{ runner.temp }}/verify_result.png
+    #   - name: Configure AWS Credentials
+    #     uses: aws-actions/configure-aws-credentials@v3
+    #     with:
+    #       aws-region: "ap-northeast-1"
+    #       role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
 
-      - name: Copy Result
-        if: ${{ always() }}
-        run: |
-          mkdir ${{ runner.temp }}/result
-          cp ${{ runner.temp }}/AirSim/*/airsim_rec.txt ${{ runner.temp }}/result
-          cp -r ${{ runner.temp }}/AirSim/*/images ${{ runner.temp }}/result
-          cp ${{ runner.temp }}/verify_result.png ${{ runner.temp }}/result
+    #   - name: Login to Amazon ECR
+    #     uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Upload Result
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: simulation_result
-          path: ${{ runner.temp }}/result
+    #   - name: Pull Docker Images
+    #     run: |
+    #       timeout 3600 sh -c 'until (docker ps > /dev/null 2>&1) do sleep 1; done'
+    #       docker pull ${{ env.SIMULATOR_IMAGE }}
+    #       docker pull ${{ env.BRIDGE_IMAGE }}
+    #       docker pull ${{ env.CONTROLLER_IMAGE }}
+
+    #   - name: Run Simulation
+    #     env:
+    #       SIMULATOR_IMAGE: ${{ env.SIMULATOR_IMAGE }}
+    #       BRIDGE_IMAGE: ${{ env.BRIDGE_IMAGE }}
+    #       CONTROLLER_IMAGE: ${{ env.CONTROLLER_IMAGE }}
+    #     working-directory: test
+    #     run: |
+    #       export SIMULATOR_ENV='./simulator_env.json'
+    #       docker-compose -f docker-compose_headless.yaml up -d
+    #       sleep 60
+    #       python3 recording.py start
+    #       python3 test.py
+    #       python3 recording.py stop
+    #       sleep 10
+    #       docker-compose -f docker-compose_headless.yaml logs
+    #       docker-compose -f docker-compose_headless.yaml cp simulator:/home/simuser/Documents/AirSim/ ${{ runner.temp }}/AirSim/
+    #       docker-compose -f docker-compose_headless.yaml down
+
+    #   - name: Verify Simulation Result
+    #     working-directory: test
+    #     run: |
+    #       python3 verify_flight_path.py \
+    #         -sp ./simulator_env.json \
+    #         -fl ${{ runner.temp }}/AirSim/*/airsim_rec.txt \
+    #         -png ${{ runner.temp }}/verify_result.png
+
+    #   - name: Copy Result
+    #     if: ${{ always() }}
+    #     run: |
+    #       mkdir ${{ runner.temp }}/result
+    #       cp ${{ runner.temp }}/AirSim/*/airsim_rec.txt ${{ runner.temp }}/result
+    #       cp -r ${{ runner.temp }}/AirSim/*/images ${{ runner.temp }}/result
+    #       cp ${{ runner.temp }}/verify_result.png ${{ runner.temp }}/result
+
+    #   - name: Upload Result
+    #     if: ${{ always() }}
+    #     uses: actions/upload-artifact@v3
+    #     with:
+    #       name: simulation_result
+    #       path: ${{ runner.temp }}/result
