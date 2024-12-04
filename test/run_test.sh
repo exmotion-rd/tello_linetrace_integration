@@ -1,7 +1,7 @@
 #!/bin/bash
 xhost +
 
-DOCKER_REGISTORY=`yq eval '.registory' ../config.yaml`
+DOCKER_REGISTORY=`envsubst < ../config.yaml | yq eval '.registory' -`
 SIMULATOR_REPOS=`yq eval '.images.simulator.repository' ../config.yaml`
 SIMULATOR_TAG=`yq eval '.images.simulator.tag' ../config.yaml`
 BRIDGE_REPOS=`yq eval '.images.bridge.repository' ../config.yaml`
