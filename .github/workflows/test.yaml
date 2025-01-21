@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   pickup_testcases:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       testcases: ${{ steps.pickup_testcases.outputs.value }}
     steps:
