@@ -10,7 +10,7 @@ on:
 
 jobs:
   update_config:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GH_REPO_ACCESS_TOKEN }}
     steps:
