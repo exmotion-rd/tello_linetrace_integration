@@ -72,7 +72,7 @@ jobs:
 
       - name: Parse config.yaml
         run: |
-          export AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+          export AWS_ACCOUNT=${{ secrets.AWS_ACCOUNT }}
           DOCKER_REGISTORY=`envsubst < config.yaml | yq eval '.registory'`
           SIMULATOR_REPOS=`envsubst < config.yaml | yq eval '.images.simulator.repository'`
           SIMULATOR_TAG=`envsubst < config.yaml | yq eval '.images.simulator.tag'`
