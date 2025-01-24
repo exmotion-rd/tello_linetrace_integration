@@ -142,3 +142,10 @@ jobs:
         with:
           name: ${{ matrix.testcase }}
           path: ${{ runner.temp }}/result
+
+  verify_tests:
+    runs-on: ubuntu-latest
+    needs: run_tests
+    steps:
+      - name: Verify All Tests Succeeded
+        run: echo "All Test jobs succeeded!"
